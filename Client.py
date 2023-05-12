@@ -22,7 +22,7 @@ POPEN_TIMEOUT = 60 # seconds
 
 host = "192.168.56.1"
 port = 12345
-
+host = print("Masukan IP Address : ")
 
 class Status:
 	OK = "OK"

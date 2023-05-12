@@ -16,6 +16,8 @@ PAYLOAD_SUFFIX = b'\x00\x00\xff\xff'
 host = "192.168.56.1"
 port = 12345
 
+host = input("Masukan Ip Adress : ")
+print(host)
 
 class Status:
 	OK = "OK"
@@ -223,7 +225,7 @@ class Session:
 		return res
 
 
-class Server(Colours):
+class Server():
 	def __init__(self, connect:Tuple[str,int]=(host, port), auth:str=""):
 		super().__init__()
 		signal.signal(signal.SIGINT, self.exit_gracefully)
